@@ -6,7 +6,7 @@ from api.models import Product
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ['id', 'name', 'price', 'market']
+        fields = ['id', 'name', 'price', 'market', 'image']
 
 class Products(viewsets.ModelViewSet):
     """
