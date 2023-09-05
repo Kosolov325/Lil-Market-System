@@ -42,7 +42,7 @@ class Cart(APIView):
         entries = request.user.cartentry_set.all()
         total_price = entries.aggregate(total_price=Sum(F('qnt') * F('product__price')))['total_price']
         
-        return Response({'subtotal': total_price if None else 0.0})
+        return Response({'subtotal': total_price if total_price else 0.0})
     
 class Purchase(APIView):
     permission_classes = [IsAuthenticated]
@@ -59,6 +59,7 @@ class Purchase(APIView):
         if wallet.amount - total_price >= 0:
             wallet.amount -= total_price
             wallet.save()
+            entries.delete()
             message = f"Compra realizada com sucesso!"
             code = status.HTTP_200_OK
         else:
