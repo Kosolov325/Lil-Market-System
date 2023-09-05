@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework import serializers
 from api.models import Market
-from api.permissions import IsAdminUserOrReadOnly
+from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 
 # Create your views here.
 class MarketSerializer(serializers.ModelSerializer):
@@ -15,4 +15,5 @@ class Markets(viewsets.ModelViewSet):
     """
     queryset = Market.objects.all()
     serializer_class = MarketSerializer
-    permission_classes = [IsAdminUserOrReadOnly]
+    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
+
