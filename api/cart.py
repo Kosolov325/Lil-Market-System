@@ -4,7 +4,8 @@ from rest_framework import serializers
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
-from api.models import CartEntry, Product, Wallet
+from api.models import CartEntry, Product
+from api.product import ProductSerializer
 from django.db.models import Sum, F
 
 # Create your views here.
@@ -19,11 +20,15 @@ class OwnerOrAdmin(DjangoModelPermissions):
     
 class CartEntrySerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    product = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all())
+    product_info = serializers.SerializerMethodField()
+    product = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all(), write_only=True)
 
+    def get_product_info(self, obj):
+        return ProductSerializer(obj.product).data
+    
     class Meta:
         model = CartEntry
-        fields = ['id', 'user', 'product', 'qnt']
+        fields = ['id', 'user', 'product', 'product_info','qnt']
 
 class CartEntries(viewsets.ModelViewSet):
     """
