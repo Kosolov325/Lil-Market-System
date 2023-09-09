@@ -29,6 +29,8 @@ ALLOWED_HOSTS = ['*']
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+X_FRAME_OPTIONS = 'ALLOWALL'
+
 # Application definition
 
 INSTALLED_APPS = [
